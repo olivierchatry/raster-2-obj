@@ -1,0 +1,14 @@
+{
+	"name": "raster-2-obj",
+	"version": "1.0.0",
+	"private": true,
+	"scripts": {
+		"start": "node raster-2-obj.js"
+	},
+	"dependencies": {
+		"async":"*",
+		"optimist":"*",
+		"delaunay":"*",
+		"poly2tri":"*"
+	}
+}
