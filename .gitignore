@@ -29,7 +29,7 @@ node_modules
 
 # Debug log from npm
 npm-debug.log
-
+!tools/*
 .envrc
 env.bat
 env.*.bat
