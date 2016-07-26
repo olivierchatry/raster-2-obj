@@ -1,14 +1,32 @@
 {
 	"name": "raster-2-obj",
 	"version": "1.0.0",
-	"private": true,
-	"scripts": {
-		"start": "node raster-2-obj.js"
-	},
+	"private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/olivierchatry/raster-2-obj.git"
+  },
+	"bin": {
+    "raster-2-obj": "./bin/raster-2-obj.js"
+  },
+ 	"author": "Olivier Chatry",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/olivierchatry/raster-2-obj/issues"
+  },
+  "files": [
+    "bin/**",
+    "tools/**",
+    "index.js"
+  ],
+  "homepage": "https://github.com/olivierchatry/raster-2-obj",
+
 	"dependencies": {
 		"async":"*",
 		"optimist":"*",
 		"delaunay":"*",
-		"poly2tri":"*"
+		"poly2tri":"*",
+		"jimp":"*",
+		"potrace":"*"
 	}
 }
