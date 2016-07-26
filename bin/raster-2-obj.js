@@ -38,12 +38,12 @@ const polygonToOBJ = function (geometry, opts) {
 		return
 	}
 	const tris 		= swctx.getTriangles()
-
+	const output 	= argv.xz ? (x,y,z) => `\tv ${x} ${z} ${y}\n` : (x,y,z) => `\tv ${x} ${y} ${z}\n`
 	points.forEach(
-		p => opts.OBJ += `\tv ${p.x * opts.scale} ${p.y * opts.scale} 0\n`
+		p => opts.OBJ += output(p.x * opts.scale, p.y * opts.scale, 0)
 	)
 	points.forEach(
-		p => opts.OBJ += `\tv ${p.x * opts.scale} ${p.y * opts.scale} ${opts.depth}\n`
+		p => opts.OBJ += output(p.x * opts.scale, p.y * opts.scale, opts.depth)
 	)
 		
 	const short = (i, p, o) =>tris[i].getPoint(p).id + o
