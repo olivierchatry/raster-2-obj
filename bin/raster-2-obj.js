@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 'use strict'
 
-const exec = require('child_process').exec
-const async = require('async')
-const argv = require('optimist').argv
-const path  = require('path')
-const fs = require('fs')
-const delaunay = require('delaunay')
-const poly2tri = require('poly2tri')
-const potrace = `${__dirname}${path.sep}..${path.sep}tools${path.sep}potrace`
-const polygontoOBJ = function (geometry, opts) {
+const exec 			= require('child_process').exec
+const async 		= require('async')
+const argv 			= require('optimist').argv
+const path  		= require('path')
+const fs 				= require('fs')
+const poly2tri 	= require('poly2tri')
+const jimp 			= require("jimp")
+
+const potrace 	= `${__dirname}${path.sep}..${path.sep}tools${path.sep}potrace`
+
+
+const polygonToOBJ = function (geometry, opts) {
 	opts.OBJ += `o ${opts.fileName}_object_${opts.count}\n`							
 	let   id = 0
 	
@@ -77,7 +80,14 @@ async.each(argv._,
 		const fileOBJ = `${file}.obj`
 		const fileName = path.basename(file, path.extname(file)) 
 		async.waterfall([
-			(callbackWaterfall) => {				
+			(callbackWaterfall) => {
+				jimp.read(file, callbackWaterfall)
+			},	
+			(input, callbackWaterfall) => {
+				file += ".bmp"
+				input.write(file, callbackWaterfall)
+			},
+			(input, callbackWaterfall) => {				
 				const cmd = `${potrace} -b geojson ${file} -o ${fileOut}`
 				exec(cmd, (error, stdout, stderr) => {					
 					callbackWaterfall(error)
@@ -101,7 +111,7 @@ async.each(argv._,
 					(feature, next) => {
 						const geometry = feature.geometry
 						if (geometry && geometry.type === "Polygon" && geometry.coordinates) {
-							polygontoOBJ(geometry, opts)
+							polygonToOBJ(geometry, opts)
 							opts.count++
 						}
 						next()
