@@ -1,12 +1,13 @@
-'use strict';
+#!/usr/bin/env node
+'use strict'
 
-const exec = require('child_process').exec;
+const exec = require('child_process').exec
 const async = require('async')
 const argv = require('optimist').argv
 const path  = require('path')
-const fs = require('fs');
+const fs = require('fs')
 const delaunay = require('delaunay')
-const poly2tri = require('poly2tri');
+const poly2tri = require('poly2tri')
 
 const potrace = `.${path.sep}tools${path.sep}potrace`
 const depth = argv.depth || 10
@@ -28,7 +29,7 @@ async.each(argv._,
 				fs.readFile(fileOut, 'utf8', callbackWaterfall)
 			},
 			function(data, callbackWaterfall) {				
-				const parsedJSON = JSON.parse(data);
+				const parsedJSON = JSON.parse(data)
 				
 				let OBJ = ""
 				let count = 0				
@@ -41,22 +42,20 @@ async.each(argv._,
 								case "Polygon":		
 									OBJ += `o ${fileName}_object_${count}\n`							
 									let   id = 0
+									
 									const points 	= geometry.coordinates[0].map(
 										p => { return {x:p[0], y:p[1], id:++id}}
+									).filter(
+										(it, index, ar) => ar.find( 
+											(cur) => (cur.x === it.x) && (cur.y === it.y)
+										)
 									)
-																	
-									{
-										const len 		= points.length
-										if ( (points[0].x === points[len - 1].x) 
-											&& (points[0].y === points[len - 1].y) ) {
-											points.pop()
-										}									
-									}
+
 									const pointsLength = points.length
 									
-									poly2tri.noConflict();									
-									const swctx = new poly2tri.SweepContext(points, {cloneArrays:true});
-									swctx.triangulate();
+									poly2tri.noConflict()
+									const swctx = new poly2tri.SweepContext(points, {cloneArrays:true})
+									swctx.triangulate()
 
 									const tris 		= swctx.getTriangles()
 
@@ -92,12 +91,10 @@ async.each(argv._,
 										OBJ += `\tf ${i3} ${i2} ${i4}\n`										
 									}
 
-									
-
 									vertexCount += pointsLength * 2
-									break;
+									break
 							}							
-							count++;
+							count++
 						}
 					}
 				)				
